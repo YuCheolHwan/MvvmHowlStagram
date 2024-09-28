@@ -40,9 +40,9 @@ class LoginActivity : AppCompatActivity() {
         printHashKey(this)
 
         binding.emailLoginButton.setOnClickListener {
-            loginViewModel.id.value = binding.edittextId.text.toString()
-            loginViewModel.password.value = binding.edittextPassword.text.toString()
-            loginViewModel.loginWithSignUpEmail()
+            val email = binding.edittextId.text.toString()
+            val password = binding.edittextPassword.text.toString()
+            loginViewModel.loginWithSignUpEmail(email, password)
         }
         binding.findIdPasswordButton.setOnClickListener {
             findId()

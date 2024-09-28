@@ -35,13 +35,12 @@ class LoginViewModel(application: Application) :AndroidViewModel(application) {
         googleSignInClient = GoogleSignIn.getClient(context,gso)
     }
 
-    fun loginWithSignUpEmail(){
-        println("Email")
-        auth.createUserWithEmailAndPassword(id.value.toString(),password.value.toString()).addOnCompleteListener{
-            if(it.isSuccessful){
+    fun loginWithSignUpEmail(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.isSuccessful) {
                 showInputNumberActivity.value = true
-            }else{
-                // 아이디가 있을경우
+            } else {
+                // 실패 처리
             }
         }
     }
