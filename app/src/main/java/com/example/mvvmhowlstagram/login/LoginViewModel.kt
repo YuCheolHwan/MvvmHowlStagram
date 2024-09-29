@@ -22,6 +22,7 @@ class LoginViewModel(application: Application) :AndroidViewModel(application) {
 
     var showInputNumberActivity : MutableLiveData<Boolean> = MutableLiveData(false)
     var showFindIdActivity : MutableLiveData<Boolean> = MutableLiveData(false)
+    var showMainActivity : MutableLiveData<Boolean> = MutableLiveData(false)
 
     var context = getApplication<Application>().applicationContext
 
@@ -39,8 +40,17 @@ class LoginViewModel(application: Application) :AndroidViewModel(application) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 showInputNumberActivity.value = true
+            }else{
+                loginEmail(email,password)
+            }
+        }
+    }
+    fun loginEmail(email : String, password : String){
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.result.user?.isEmailVerified == true) {
+                showMainActivity.value = true
             } else {
-                // 실패 처리
+                showInputNumberActivity.value = true
             }
         }
     }
@@ -52,9 +62,11 @@ class LoginViewModel(application: Application) :AndroidViewModel(application) {
         var credential = GoogleAuthProvider.getCredential(idToken,null)
         auth.signInWithCredential(credential).addOnCompleteListener{
             if(it.isSuccessful){
-                showInputNumberActivity.value = true
-            }else{
-                // 아이디가 있을경우
+                if (it.result.user?.isEmailVerified == true) {
+                    showMainActivity.value = true
+                } else {
+                    showInputNumberActivity.value = true
+                }
             }
         }
     }
@@ -62,9 +74,11 @@ class LoginViewModel(application: Application) :AndroidViewModel(application) {
         var credential = FacebookAuthProvider.getCredential(accessToken.token)
         auth.signInWithCredential(credential).addOnCompleteListener{
             if(it.isSuccessful){
-                showInputNumberActivity.value = true
-            }else{
-                // 아이디가 있을경우
+                if (it.result.user?.isEmailVerified == true) {
+                    showMainActivity.value = true
+                } else {
+                    showInputNumberActivity.value = true
+                }
             }
         }
     }
